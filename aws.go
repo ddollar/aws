@@ -117,12 +117,11 @@ type Error struct {
 //    AuthFailure: "There is a problem with your secret"
 //    OMG: "You're servers are all gone!"
 func (err *Error) Error() string {
-	var s string
-	for _, e := range err.Errors {
-		s += fmt.Sprintf("\t%s: %q\n", e.Code, e.Message)
+	errors := make([]string, len(err.Errors))
+	for i, e := range err.Errors {
+		errors[i] = fmt.Sprintf("%s: %s", e.Code, e.Message)
 	}
-
-	return fmt.Sprintf("aws: ->\n%s", s)
+	return strings.Join(errors, "\n")
 }
 
 func Do(r *Request, v interface{}) error {
