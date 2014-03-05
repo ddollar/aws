@@ -201,3 +201,25 @@ func DescribeInstances() (*DescribeInstancesResponse, error) {
 	v := new(DescribeInstancesResponse)
 	return v, Do(&r, v)
 }
+
+type DescribeTagsResponse struct {
+	Header
+	Tags []Tag `xml:"tagSet>item"`
+}
+
+type Tag struct {
+	ResourceId string `xml:"resourceId"`
+	ResourceType string `xml:"resourceType"`
+	Key string `xml:"key"`
+	Value string `xml:"value"`
+}
+
+func DescribeTags(instanceId string) (*DescribeTagsResponse, error) {
+	r := TemplateRequest
+	r.Add("Action", "DescribeTags")
+	r.Add("Filter.1.Name", "resource-id")
+	r.Add("Filter.1.Value", instanceId)
+
+	v := new(DescribeTagsResponse)
+	return v, Do(&r, v)
+}
